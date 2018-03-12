@@ -50,8 +50,12 @@ bearsRouter.delete('/:id', (req, res) => {
 });
 
 bearsRouter.put('/:id', (req, res) => {
-  const { id } = req.params;
   const updateInfo = req.body;
+  if (!updateInfo.species || !updateInfo.latinName)
+    return res
+      .status(400)
+      .json({ errorMessage: 'Please provide both species and latinName for the Bear.' });
+  const { id } = req.params;
   Bear.findByIdAndUpdate(id, updateInfo)
     .then(bear => Bear.findById(id))
     .then(bear => {
