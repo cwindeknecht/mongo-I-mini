@@ -53,9 +53,9 @@ bearsRouter.put('/:id', (req, res) => {
   const { id } = req.params;
   const updateInfo = req.body;
   Bear.findByIdAndUpdate(id, updateInfo)
-  .then(bears => Bear.find({}))
-    .then(bears => {
-      res.status(200).json(bears);
+    .then(bear => Bear.findById(id))
+    .then(bear => {
+      res.status(200).json(bear);
     })
     .catch(err => {
       res.status(500).json({ msg: 'Error getting bears', error: err });
