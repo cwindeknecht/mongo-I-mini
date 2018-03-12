@@ -4,9 +4,8 @@ const Bear = require('./BearModel.js');
 
 const bearsRouter = express.Router();
 
-bearsRouter.post('/', function(req, res) {
+bearsRouter.post('/', (req, res) => {
   const bearInfo = req.body;
-
   const bear = new Bear(bearInfo);
 
   bear
@@ -19,7 +18,7 @@ bearsRouter.post('/', function(req, res) {
     });
 });
 
-bearsRouter.get('/', function(req, res) {
+bearsRouter.get('/', (req, res) => {
   Bear.find({})
     .then(bears => {
       res.status(200).json(bears);
@@ -28,5 +27,16 @@ bearsRouter.get('/', function(req, res) {
       res.status(500).json({ msg: 'Error getting bears', error: err });
     });
 });
+
+bearsRouter.get('/:id', (req, res) => {
+    const { id } = req.params;
+    Bear.findById(id)
+      .then(bears => {
+        res.status(200).json(bears);
+      })
+      .catch(err => {
+        res.status(500).json({ msg: 'Error getting bears', error: err });
+      });
+  });
 
 module.exports = bearsRouter;
