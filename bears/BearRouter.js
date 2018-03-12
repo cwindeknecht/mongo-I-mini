@@ -16,6 +16,10 @@ bearsRouter.get('/', (req, res) => {
 
 bearsRouter.post('/', (req, res) => {
   const bearInfo = req.body;
+  if (!bearInfo.species || !bearInfo.latinName)
+    return res
+      .status(400)
+      .json({ errorMessage: 'Please provide both species and latinName for the Bear.' });
   const bear = new Bear(bearInfo);
   bear
     .save()
@@ -31,7 +35,8 @@ bearsRouter.get('/:id', (req, res) => {
   const { id } = req.params;
   Bear.findById(id)
     .then(bear => {
-        if (!bear) return res.status(404).json({ msg: `Error getting bear at ID: ${id}`, error: err });
+      if (!bear)
+        return res.status(404).json({ msg: `Error getting bear at ID: ${id}`, error: err });
       res.status(200).json({ msg: "Here's That Bear You Requested", bear });
     })
     .catch(err => {
@@ -43,10 +48,12 @@ bearsRouter.delete('/:id', (req, res) => {
   const { id } = req.params;
   Bear.findByIdAndRemove(id)
     .then(bear => {
+      if (!bear)
+        return res.status(404).json({ msg: `Error getting bear at ID: ${id}`, error: err });
       res.status(200).json({ msg: 'Deleted Bear', bear });
     })
     .catch(err => {
-      res.status(500).json({ msg: 'Error getting bears', error: err });
+      res.status(500).json({ msg: 'Error Deleting Bear', error: err });
     });
 });
 
@@ -65,7 +72,9 @@ bearsRouter.put('/:id', (req, res) => {
       res.status(201).json({ msg: 'Updated Bear', bear });
     })
     .catch(err => {
-      res.status(500).json({ msg: 'There was an error while saving the Bear to the Database', error: err });
+      res
+        .status(500)
+        .json({ msg: 'There was an error while saving the Bear to the Database', error: err });
     });
 });
 
