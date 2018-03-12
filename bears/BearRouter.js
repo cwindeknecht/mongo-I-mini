@@ -29,14 +29,25 @@ bearsRouter.get('/', (req, res) => {
 });
 
 bearsRouter.get('/:id', (req, res) => {
-    const { id } = req.params;
-    Bear.findById(id)
-      .then(bears => {
-        res.status(200).json(bears);
-      })
-      .catch(err => {
-        res.status(500).json({ msg: 'Error getting bears', error: err });
-      });
-  });
+  const { id } = req.params;
+  Bear.findById(id)
+    .then(bear => {
+      res.status(200).json(bear);
+    })
+    .catch(err => {
+      res.status(500).json({ msg: `Error getting bear at id ${id}`, error: err });
+    });
+});
+
+bearsRouter.delete('/:id', (req, res) => {
+  const { id } = req.params;
+  Bear.findByIdAndRemove(id)
+    .then(bear => {
+      res.status(200).json(bear);
+    })
+    .catch(err => {
+      res.status(500).json({ msg: 'Error getting bears', error: err });
+    });
+});
 
 module.exports = bearsRouter;
