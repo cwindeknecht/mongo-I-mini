@@ -7,7 +7,7 @@ const bearsRouter = express.Router();
 bearsRouter.get('/', (req, res) => {
   Bear.find({})
     .then(bears => {
-      res.status(200).json(bears);
+      res.status(200).json({ msg: "Here's All the Bears", bears });
     })
     .catch(err => {
       res.status(500).json({ msg: 'Error getting bears', error: err });
@@ -20,7 +20,7 @@ bearsRouter.post('/', (req, res) => {
   bear
     .save()
     .then(savedBear => {
-      res.status(201).json(savedBear);
+      res.status(201).json({ msg: "Here's That Bear You Created", savedBear });
     })
     .catch(err => {
       res.status(500).json({ msg: 'Error saving bear', error: err });
@@ -31,10 +31,10 @@ bearsRouter.get('/:id', (req, res) => {
   const { id } = req.params;
   Bear.findById(id)
     .then(bear => {
-      res.status(200).json(bear);
+      res.status(200).json({ msg: "Here's That Bear You Requested", bear });
     })
     .catch(err => {
-      res.status(500).json({ msg: `Error getting bear at id ${id}`, error: err });
+      res.status(500).json({ msg: `Error getting bear at ID: ${id}`, error: err });
     });
 });
 
@@ -42,7 +42,7 @@ bearsRouter.delete('/:id', (req, res) => {
   const { id } = req.params;
   Bear.findByIdAndRemove(id)
     .then(bear => {
-      res.status(200).json(bear);
+      res.status(200).json({ msg: 'Deleted Bear', bear });
     })
     .catch(err => {
       res.status(500).json({ msg: 'Error getting bears', error: err });
@@ -55,7 +55,7 @@ bearsRouter.put('/:id', (req, res) => {
   Bear.findByIdAndUpdate(id, updateInfo)
     .then(bear => Bear.findById(id))
     .then(bear => {
-      res.status(200).json(bear);
+      res.status(200).json({ msg: 'Updated Bear', bear });
     })
     .catch(err => {
       res.status(500).json({ msg: 'Error getting bears', error: err });
