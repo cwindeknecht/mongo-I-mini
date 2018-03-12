@@ -64,7 +64,7 @@ bearsRouter.put('/:id', (req, res) => {
       .status(400)
       .json({ errorMessage: 'Please provide both species and latinName for the Bear.' });
   if (typeof updateInfo.species !== String || typeof updateInfo.latinName !== String)
-    return res.status(400).json({ errorMessage: 'You provided non-string types.' });
+    return res.status(400).json({ errorMessage: 'You provided string types.' });
   const { id } = req.params;
   Bear.findByIdAndUpdate(id, updateInfo)
     .then(bear => Bear.findById(id))
